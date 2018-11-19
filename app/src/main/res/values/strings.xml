@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">TaxCalculator</string>
+        <string name="salary_input_hint">Please enter yearly salary</string>
+        <string name="calculate_button">Calculate</string>
+        <string name="tax">Tax: </string>
+        <string name="clean_income">Income without tax: </string>
+        <string name="choose_contract">Choose employment contract</string>
+        <string name="PKD">Prohlášení k dani</string>
+        <string name="ZTP">ZTP/P</string>
+        <string name="inv_duchod">Invalidní důchod</string>
+        <string name="student">Student</string>
+        <string name="next">next</string>
+        <string name="no_income_ex">Please enter income</string>
 </resources>

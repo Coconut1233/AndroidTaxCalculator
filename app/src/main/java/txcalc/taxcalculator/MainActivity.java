@@ -1,55 +1,77 @@
 package txcalc.taxcalculator;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    private final String[] contracts = new String[]{"Dohoda o provedení práce",
-                                                    "Dohoda o pracovní činnosti",
-                                                    "Zkrácený úvazek",
-                                                    "Plný úvazek"};
+    private static final String[] contracts = new String[]{"Dohoda o provedení práce",
+                                                            "Dohoda o pracovní činnosti",
+                                                            "Zkrácený úvazek",
+                                                            "Plný úvazek"};
+    private static boolean Student;
+    private static boolean ZTP;
+    private static String contract;
+    private static boolean PKD;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Spinner droplist = findViewById(R.id.contracts);
+        final Spinner droplist = findViewById(R.id.contracts);
         droplist.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, contracts));
-        CheckBox isStudent  = findViewById(R.id.isStudent);
-        CheckBox isZTP  = findViewById(R.id.isZTP);
+        final CheckBox isStudent = findViewById(R.id.isStudent);
+        final CheckBox isZTP = findViewById(R.id.isZTP);
+        final CheckBox isPKD = findViewById(R.id.isPKD);
         Button toCalc = findViewById(R.id.toCalc);
 
         toCalc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setContentView(R.layout.second_activity);
+                contract = droplist.getSelectedItem().toString();
+                if (isStudent.isChecked()) {
+                    Student = true;
+                }
+                if (isZTP.isChecked()) {
+                    ZTP = true;
+                }
+                if (isPKD.isChecked()) {
+                    PKD = true;
+                }
+                goToCalc(v);
             }
         });
-        Button calc = findViewById(R.id.calc);
-        final TextView result = findViewById(R.id.result);
-        final EditText salaryInput = findViewById(R.id.SalaryInput);
+    }
 
-        calc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final double salary = Double.parseDouble(salaryInput.getText().toString());
-                result.setText(String.valueOf(calculateTax(salary)));
-            }
-        });
+    private void goToCalc(View view) {
+        Intent intent = new Intent(this, SecondActivity.class);
+        startActivity(intent);
+    }
+
+    public static String getContract() {
+        return contract;
+    }
+
+    public static boolean isPKD() {
+        return PKD;
+    }
+
+    public static String[] getContracts() {
+        return contracts;
 
     }
-    private static double calculateTax(double salary){
-        double tax = 0;
-        if(salary>10000){
-            tax = 0.1*salary;
-        }
-        return tax;
+
+    public static boolean isStudent() {
+        return Student;
+    }
+
+    public static boolean isZTP() {
+        return ZTP;
     }
 }
+
