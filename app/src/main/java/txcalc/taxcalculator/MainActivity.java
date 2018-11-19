@@ -18,31 +18,84 @@ public class MainActivity extends AppCompatActivity {
     private static boolean ZTP;
     private static String contract;
     private static boolean PKD;
+    private static boolean partner;
+    private static boolean partner_ZTP;
+    private static int invalidity;
+    private static int children;
+    private static int childrenZTP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final Spinner hasChildren = findViewById(R.id.children);
+        hasChildren.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"0","1 "+R.string.child, "2 "+R.string.child_pl, "3 "+R.string.child_pl}));
+        final Spinner hasChildrenZTP = findViewById(R.id.childrenZTP);
+        hasChildrenZTP.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"0","1 "+R.string.child, "2 "+R.string.child_pl, "3 "+R.string.child_pl}));
+        final Spinner hasInvalidity = findViewById(R.id.invalidity);
+        hasInvalidity.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"0",R.string.invalidity+" 1/2",R.string.invalidity+" 3"}));
         final Spinner droplist = findViewById(R.id.contracts);
         droplist.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, contracts));
+        final CheckBox hasPartner = findViewById(R.id.partner);
+        final CheckBox hasPartnerZTP = findViewById(R.id.partnerZTP);
         final CheckBox isStudent = findViewById(R.id.isStudent);
         final CheckBox isZTP = findViewById(R.id.isZTP);
         final CheckBox isPKD = findViewById(R.id.isPKD);
         Button toCalc = findViewById(R.id.toCalc);
-
+        //TODO partner listener
         toCalc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 contract = droplist.getSelectedItem().toString();
+
+                if(hasChildren.getSelectedItem().toString().contains("0")){
+                    children = 0;
+                } else if(hasChildren.getSelectedItem().toString().contains("1")){
+                    children = 1;
+                } else if(hasChildren.getSelectedItem().toString().contains("2")){
+                    children = 2;
+                } else {
+                    children = 3;
+                }
+
+                if(hasChildrenZTP.getSelectedItem().toString().contains("0")){
+                    childrenZTP = 0;
+                } else if(hasChildrenZTP.getSelectedItem().toString().contains("1")){
+                    childrenZTP = 1;
+                } else if(hasChildrenZTP.getSelectedItem().toString().contains("2")){
+                    childrenZTP = 2;
+                } else {
+                    childrenZTP = 3;
+                }
+
+                if(hasInvalidity.getSelectedItem().toString().contains("0")){
+                    invalidity = 0;
+                } else if(hasInvalidity.getSelectedItem().toString().contains("1")){
+                    invalidity = 1;
+                } else if(hasInvalidity.getSelectedItem().toString().contains("3")){
+                    invalidity = 3;
+                }
+
+                if(hasPartner.isChecked()){
+                    partner = true;
+                }
+
+                if(hasPartnerZTP.isChecked()){
+                    partner_ZTP = true;
+                }
+
                 if (isStudent.isChecked()) {
                     Student = true;
                 }
+
                 if (isZTP.isChecked()) {
                     ZTP = true;
                 }
+
                 if (isPKD.isChecked()) {
                     PKD = true;
                 }
+
                 goToCalc(v);
             }
         });
@@ -59,6 +112,30 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean isPKD() {
         return PKD;
+    }
+
+    public static int getChildrenZTP() {
+        return childrenZTP;
+    }
+
+    public static int getChildren() {
+
+        return children;
+    }
+
+    public static int getInvalidity() {
+
+        return invalidity;
+    }
+
+    public static boolean isPartner_ZTP() {
+
+        return partner_ZTP;
+    }
+
+    public static boolean isPartner() {
+
+        return partner;
     }
 
     public static String[] getContracts() {

@@ -8,11 +8,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class SecondActivity extends Activity {
+    final static int soczdrav = 1100;
     final String contract = MainActivity.getContract();
     final boolean isStudent = MainActivity.isStudent();
     final boolean isZTP = MainActivity.isZTP();
     final String[] contracts = MainActivity.getContracts();
     final boolean isPKD = MainActivity.isPKD();
+    private boolean partner = MainActivity.isPartner();
+    private boolean partner_ZTP = MainActivity.isPartner_ZTP();
+    private int invalidity = MainActivity.getInvalidity();
+    private int children = MainActivity.getChildren();
+    private int childrenZTP = MainActivity.getChildrenZTP();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +35,7 @@ public class SecondActivity extends Activity {
                 try {
                     double cTax = calculateTax(salary);
                     tax.setText(String.valueOf(cTax));
-                    cleanInocme.setText(String.valueOf(salary-cTax));
+                    cleanInocme.setText(String.valueOf(salary - cTax));
                 } catch (NumberFormatException e) {
                     tax.setText(R.string.no_income_ex);
                 }
@@ -55,30 +61,74 @@ public class SecondActivity extends Activity {
 
     private double calculateDPPTax(double salary) {
         double tax = 0;
-        if(salary<=10000){
-            if(!isPKD){
-                tax = 0.15*salary;
-            } else {
-                tax = 0;
-            }
+        if (salary <= 10000) {
+            tax = 0.15 * salary;
+            tax = creditMontly(tax);
         } else {
-            if(!isPKD){
-                tax+=0.15*salary;
-            }
+                int taxBase = (int) (Math.ceil((salary * 1.34) / 100) * 100);
+                tax += taxBase * 0.15;
+                tax += soczdrav;
+                tax = creditMontly(tax);
         }
         return tax;
     }
 
     private double calculateDPCTax(double salary) {
+        //TODO
         return 0.0;
     }
 
     private double calculateHPPTax(double salary) {
+        //TODO
         return 0.0;
     }
 
     private double calculateZPPTax(double salary) {
+        //TODO
         return 0.0;
+    }
+
+    private double creditMontly(double tax) {
+        if(isStudent){
+            tax -= Credits.STUDENT.getCredit()/12;
+        }
+        if(isZTP){
+            tax -= Credits.ZTP.getCredit()/12;
+        }
+        if(isPKD){
+            tax -= Credits.PKD.getCredit()/12;
+        }
+        if(partner){
+            tax -= Credits.PARTNER.getCredit()/12;
+        }
+        if (partner_ZTP){
+            tax -= Credits.PARTNER_ZTP.getCredit();
+        }
+        if(children==1){
+            tax -= Credits.CHILDREN_1.getCredit();
+        }
+        if(children==2){
+            tax -= Credits.CHILDREN_2.getCredit();
+        }
+        if(children==3){
+            tax -= Credits.CHILDREN_3.getCredit();
+        }
+        if(childrenZTP==1){
+            tax -= Credits.CHILDREN_1_ZTP.getCredit();
+        }
+        if(childrenZTP==2){
+            tax -= Credits.CHILDREN_2_ZTP.getCredit();
+        }
+        if(children==3){
+            tax -= Credits.CHILDREN_3_ZTP.getCredit();
+        }
+        if(invalidity==1){
+            tax -= Credits.INVALIDITY_1_2.getCredit();
+        }
+        if(invalidity==3){
+            tax -= Credits.INVALIDITY_3.getCredit();
+        }
+        return tax;
     }
 }
 
