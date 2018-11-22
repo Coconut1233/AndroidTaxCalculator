@@ -24,25 +24,43 @@ public class MainActivity extends AppCompatActivity {
     private static int children;
     private static int childrenZTP;
 
+    final Spinner hasChildren = findViewById(R.id.children);
+    final Spinner hasChildrenZTP = findViewById(R.id.childrenZTP);
+    final Spinner hasInvalidity = findViewById(R.id.invalidity);
+    final Spinner droplist = findViewById(R.id.contracts);
+    final CheckBox hasPartner = findViewById(R.id.partner);
+    final CheckBox hasPartnerZTP = findViewById(R.id.partnerZTP);
+    final CheckBox isStudent = findViewById(R.id.isStudent);
+    final CheckBox isZTP = findViewById(R.id.isZTP);
+    final CheckBox isPKD = findViewById(R.id.isPKD);
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Spinner hasChildren = findViewById(R.id.children);
         hasChildren.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"0","1 "+R.string.child, "2 "+R.string.child_pl, "3 "+R.string.child_pl}));
-        final Spinner hasChildrenZTP = findViewById(R.id.childrenZTP);
         hasChildrenZTP.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"0","1 "+R.string.child, "2 "+R.string.child_pl, "3 "+R.string.child_pl}));
-        final Spinner hasInvalidity = findViewById(R.id.invalidity);
         hasInvalidity.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new String[]{"0",R.string.invalidity+" 1/2",R.string.invalidity+" 3"}));
-        final Spinner droplist = findViewById(R.id.contracts);
         droplist.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, contracts));
-        final CheckBox hasPartner = findViewById(R.id.partner);
-        final CheckBox hasPartnerZTP = findViewById(R.id.partnerZTP);
-        final CheckBox isStudent = findViewById(R.id.isStudent);
-        final CheckBox isZTP = findViewById(R.id.isZTP);
-        final CheckBox isPKD = findViewById(R.id.isPKD);
         Button toCalc = findViewById(R.id.toCalc);
         //TODO partner listener
+        hasPartner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(hasPartnerZTP.isChecked()){
+                    hasPartnerZTP.toggle();
+                }
+            }
+        });
+        hasPartnerZTP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(hasPartner.isChecked()){
+                    hasPartnerZTP.toggle();
+                }
+            }
+        });
         toCalc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
